@@ -40,6 +40,14 @@ class ValidateSiteTests(unittest.TestCase):
 
         self.assertEqual(validate_site(repository_root), [])
 
+    def test_repository_documents_public_content_boundary_and_archive(self) -> None:
+        """Maintainers must be told what public content is safe to add."""
+        repository_root = Path(__file__).resolve().parents[1]
+        readme = (repository_root / "README.md").read_text(encoding="utf-8")
+
+        self.assertIn("unpublished", readme.lower())
+        self.assertIn("archive/legacy-2021", readme)
+
 
 if __name__ == "__main__":
     unittest.main()
