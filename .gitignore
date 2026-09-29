@@ -1,0 +1,11 @@
+# Operating-system files
+.DS_Store
+Thumbs.db
+
+# Editor settings
+.idea/
+
+# Python cache and local environment files
+__pycache__/
+*.py[cod]
+.python-version
