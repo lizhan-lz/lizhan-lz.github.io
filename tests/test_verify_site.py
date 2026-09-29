@@ -34,6 +34,12 @@ class ValidateSiteTests(unittest.TestCase):
 
             self.assertIn("prohibited public copy", validate_site(root))
 
+    def test_repository_homepage_passes_static_policy_checks(self) -> None:
+        """The public root page must satisfy policy and local-link checks."""
+        repository_root = Path(__file__).resolve().parents[1]
+
+        self.assertEqual(validate_site(repository_root), [])
+
 
 if __name__ == "__main__":
     unittest.main()
