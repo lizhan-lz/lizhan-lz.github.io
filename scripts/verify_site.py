@@ -35,6 +35,16 @@ def validate_site(root: Path) -> list[str]:
     if any(phrase in lower_contents for phrase in PROHIBITED_PHRASES):
         errors.append("prohibited public copy")
 
+    archive_landing = root / "archive" / "index.html"
+    if not archive_landing.is_file():
+        errors.append("missing file: archive/index.html")
+    else:
+        archive_contents = archive_landing.read_text(encoding="utf-8").lower()
+        if "legacy personal site" not in archive_contents:
+            errors.append("archive landing lacks historical status")
+        if "current professional homepage" not in archive_contents:
+            errors.append("archive landing lacks current-home context")
+
     for reference in REFERENCE_PATTERN.findall(contents):
         target = _local_target(root, reference)
         if target is not None and not target.exists():

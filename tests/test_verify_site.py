@@ -48,6 +48,26 @@ class ValidateSiteTests(unittest.TestCase):
         self.assertIn("unpublished", readme.lower())
         self.assertIn("archive/legacy-2021", readme)
 
+    def test_repository_requires_a_historical_archive_landing_page(self) -> None:
+        """Visitors must see archival context before entering the 2021 site."""
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            sections = "".join(
+                f'<section id="{section}"></section>'
+                for section in REQUIRED_SECTIONS
+            )
+            (root / "index.html").write_text(sections, encoding="utf-8")
+
+            self.assertIn("missing file: archive/index.html", validate_site(root))
+
+    def test_homepage_footer_attributes_the_repository_and_host(self) -> None:
+        """Visitors must be able to identify the repository and GitHub Pages host."""
+        repository_root = Path(__file__).resolve().parents[1]
+        homepage = (repository_root / "index.html").read_text(encoding="utf-8")
+
+        self.assertIn("https://github.com/lizhan-lz/lizhan-lz.github.io", homepage)
+        self.assertIn("Published with GitHub Pages", homepage)
+
 
 if __name__ == "__main__":
     unittest.main()
